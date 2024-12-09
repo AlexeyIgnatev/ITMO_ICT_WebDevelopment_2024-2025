@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import DeleteView
 
 from .forms import UserRegistrationForm, ReservationForm, ReviewForm
-from .models import Hotel, RoomType, Reservation
+from .models import Hotel, RoomType, Reservation, Room
 
 
 def starting_page(request):
@@ -43,7 +43,7 @@ class ReserveDeleteView(DeleteView):
     success_url = "/reserve/"
 
 
-def room_reserve(request, hotel_id):
+def room_reserve(request):
     if request.method == 'POST':
         form = ReservationForm(request.POST)
         if form.is_valid():
@@ -53,7 +53,6 @@ def room_reserve(request, hotel_id):
             return redirect('hotel_list')
     else:
         form = ReservationForm()
-        form.fields['room_type'].queryset = RoomType.objects.filter(hotel_id=hotel_id)
     return render(request, 'room_reserve.html', {'form': form})
 
 

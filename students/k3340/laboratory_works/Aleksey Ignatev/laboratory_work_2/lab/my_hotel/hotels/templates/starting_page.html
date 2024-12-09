@@ -15,7 +15,7 @@
         <li>Reserve a room at:</li>
         <ul>
             {% for hotel in hotels %}
-                <li><a href="{% url 'room_reserve' hotel.id %}">{{ hotel.name }}</a></li>
+                <li><a href="{% url 'room_reserve' %}">{{ hotel.name }}</a></li>
             {% empty %}
                 <li>No hotels available.</li>
             {% endfor %}

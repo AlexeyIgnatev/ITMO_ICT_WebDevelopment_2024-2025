@@ -10,7 +10,7 @@
     <h1>Hotels</h1>
     <ul>
         {% for hotel in hotels %}
-            <li><a href="{% url 'room_reserve' hotel.id %}">{{ hotel.name }}  /</a> <a href="{% url 'write_review' hotel.id %}">Оставить отзыв</a></li>
+            <li><a href="{% url 'room_reserve' %}">{{ hotel.name }}  /</a> <a href="{% url 'write_review' hotel.id %}">Оставить отзыв</a></li>
         {% endfor %}
     </ul>
 </body>

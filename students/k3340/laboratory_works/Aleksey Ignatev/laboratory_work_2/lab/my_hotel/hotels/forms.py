@@ -21,7 +21,7 @@ class UserRegistrationForm(forms.ModelForm):
 class ReservationForm(forms.ModelForm):
     class Meta:
         model = Reservation
-        fields = ['guest_name', 'room_type', 'start_date', 'end_date']
+        fields = ['start_date', 'end_date', 'room']
 
     def clean(self):
         cleaned_data = super().clean()

@@ -52,12 +52,6 @@ class OwnerAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-class ReservationAdmin(admin.ModelAdmin):
-    list_display = ['guest_name', 'room_type', 'start_date', 'end_date']
-    search_fields = ('user__username', 'room_type__name')
-    list_filter = ('user', 'room_type')
-
-
-admin.site.register(Reservation, ReservationAdmin)
+admin.site.register(Reservation)
 
 admin.site.register(Owner, OwnerAdmin)
