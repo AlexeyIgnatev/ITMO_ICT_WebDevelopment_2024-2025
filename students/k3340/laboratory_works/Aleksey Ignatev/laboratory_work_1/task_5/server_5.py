@@ -7,8 +7,7 @@ class MyHTTPServer:
         self._host = host
         self._port = port
         self._server_name = server_name
-        self.grades = []
-        self.subjects = []
+        self.grades = dict()
 
     def serve_forever(self):
         serv_sock = socket.socket(
@@ -45,6 +44,7 @@ class MyHTTPServer:
                 resp = self.create_response(405, 'Method Not Allowed', 'Only GET and POST methods are supported.')
 
             self.send_response(conn, resp)
+            print('response sent')
         except ConnectionResetError:
             conn = None
         except Exception as e:
@@ -85,8 +85,7 @@ class MyHTTPServer:
         if req.path == '/':
             response_body = '<html><body><h1>List of subjects</h1><ul>{}</ul></body></html>'
             items = ''.join(
-                '<li>{} - {}</li>'.format(subject, grade) for subject, grade in zip(self.subjects, self.grades))
-            print("Current subjects 1:" + self.subjects.__str__())
+                '<li>{} - {}</li>'.format(key, ", ".join(list(map(str, self.grades[key])))) for key in self.grades)
             response_body = response_body.format(items)
             return self.create_response(200, 'OK', response_body)
         else:
@@ -94,9 +93,9 @@ class MyHTTPServer:
 
     def handle_post_request(self, req):
         if req.path == '/record':
-            self.grades.append(req.params.get("grade"))  # Добавление оценки в список
-            self.subjects.append(req.params.get("subject"))  # Добавление предмета в список
-            print("Current subjects 2:" + self.subjects.__str__())
+            if req.params.get("subject") not in self.grades:
+                self.grades[req.params.get("subject")] = []
+            self.grades[req.params.get("subject")].append(int(req.params.get("grade")))
             return self.create_response(200, 'OK', 'Record saved')
         else:
             return self.create_response(404, 'Not Found', 'Page not found')
@@ -130,7 +129,7 @@ class HTTPRequest:
 
 if __name__ == '__main__':
     host = 'localhost'
-    port = 8000
+    port = 8001
     name = 'UselessStudentServer'
 
     serv = MyHTTPServer(host, port, name)
