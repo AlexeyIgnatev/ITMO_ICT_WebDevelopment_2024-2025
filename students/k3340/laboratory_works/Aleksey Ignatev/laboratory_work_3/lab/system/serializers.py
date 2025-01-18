@@ -15,24 +15,26 @@ class AreaSerializer(serializers.ModelSerializer):
 
 
 class CountAnimalInArea(serializers.ModelSerializer):
-
     count_animals_in = serializers.SerializerMethodField()
     animals_in = serializers.SerializerMethodField()
 
     class Meta:
         model = Area
-        fields = ['id', 'name', ' count_animals_in', 'animals_in']
+        fields = ['id', 'name', 'count_animals_in', 'animals_in']
 
     def get_count_animals_in(self, obj):
-        aias = AnimalInCage.objects.filter(cage__area=obj.id)
+        # Filter cages whose building is in the given area
+        aias = AnimalInCage.objects.filter(cage__building__area=obj)
+        # Count animals associated with those cages
         return Animal.objects.filter(where__in=aias).distinct().count()
 
     def get_animals_in(self, obj):
-        aias = AnimalInCage.objects.filter(cage__area=obj.id)
+        # Filter cages whose building is in the given area
+        aias = AnimalInCage.objects.filter(cage__building__area=obj)
+        # Get all distinct animals in those cages
         qs = Animal.objects.filter(where__in=aias).distinct()
         ser = AnimalSerializer(qs, many=True)
         return ser.data
-
 
 class CageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -61,7 +63,7 @@ class AnimalSerializer(serializers.ModelSerializer):
 class WinterPlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = WinterPlace
-        fields ='__all__'
+        fields = '__all__'
 
 
 class AnimalInCageSerializer(serializers.ModelSerializer):

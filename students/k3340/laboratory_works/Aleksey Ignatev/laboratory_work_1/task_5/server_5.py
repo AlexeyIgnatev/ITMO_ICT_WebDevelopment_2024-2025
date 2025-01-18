@@ -129,7 +129,7 @@ class HTTPRequest:
 
 if __name__ == '__main__':
     host = 'localhost'
-    port = 8001
+    port = 8002
     name = 'UselessStudentServer'
 
     serv = MyHTTPServer(host, port, name)

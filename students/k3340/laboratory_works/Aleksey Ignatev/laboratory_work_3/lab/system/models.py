@@ -57,6 +57,9 @@ class Animal(models.Model):
     winter_place = models.ForeignKey('system.WinterPlace', related_name='birds_wintering', on_delete=models.CASCADE,
                                      null=True, blank=True)
 
+    habitat_place = models.ForeignKey('system.Habitat', related_name='animals', on_delete=models.CASCADE,
+                                     null=True, blank=True)
+
     winter_sleeping = models.IntegerField(null=True, blank=True)
     normal_temperature = models.FloatField(null=True, blank=True)
 
@@ -64,7 +67,7 @@ class Animal(models.Model):
     previous_owner = models.CharField(max_length=2000)
 
     in_lease = models.BooleanField()
-    where_is_now = models.CharField(max_length=2000)
+    leaser_name = models.CharField(max_length=2000, null=True, blank=True)
 
     since = models.DateField()
 
@@ -98,6 +101,7 @@ class Worker(models.Model):
     birthday = models.DateField()
     animals = models.ManyToManyField('system.Animal', related_name='wathers')
     passport = models.CharField(max_length=20, unique=True, blank=True,  null=True)
+    email = models.CharField(max_length=100, unique=True, blank=True,  null=True)
     phone = models.CharField(max_length=20, unique=True, blank=True, null=True)
 
     def __str__(self):
